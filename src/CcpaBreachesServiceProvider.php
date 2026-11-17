@@ -2,6 +2,7 @@
 
 namespace JeffersonGoncalves\CcpaBreaches;
 
+use JeffersonGoncalves\CcpaBreaches\Commands\OverdueCommand;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 
@@ -10,9 +11,14 @@ class CcpaBreachesServiceProvider extends PackageServiceProvider
     public function configurePackage(Package $package): void
     {
         $package
-            ->name('laravel-ccpa-breaches')
+            ->name('ccpa-breaches')
             ->hasConfigFile()
-            ->hasViews()
-            ->hasMigrations();
+            ->hasMigrations(['create_ccpa_breaches_table'])
+            ->hasCommand(OverdueCommand::class);
+    }
+
+    public function packageRegistered(): void
+    {
+        $this->app->singleton(BreachManager::class);
     }
 }
